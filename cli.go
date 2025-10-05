@@ -48,9 +48,9 @@ func main() {
 	var helpFlag = flag.Bool("help", false, "View usage instructions")
 	var versionFlag = flag.Bool("version", false, "View the program version")
 	var updateSelfFlag = flag.Bool("update-self", false, "Update me to the latest version")
-	var installFlag = flag.Bool("install", false, "Install Equicord")
-	var updateFlag = flag.Bool("repair", false, "Repair Equicord")
-	var uninstallFlag = flag.Bool("uninstall", false, "Uninstall Equicord")
+    var installFlag = flag.Bool("install", false, "Install Privcord")
+    var updateFlag = flag.Bool("repair", false, "Repair Privcord")
+    var uninstallFlag = flag.Bool("uninstall", false, "Uninstall Privcord")
 	var installOpenAsarFlag = flag.Bool("install-openasar", false, "Install OpenAsar")
 	var uninstallOpenAsarFlag = flag.Bool("uninstall-openasar", false, "Uninstall OpenAsar")
 	var locationFlag = flag.String("location", "", "The location of the Discord install to modify")
@@ -107,10 +107,10 @@ func main() {
 			}
 		}()
 
-		choices := []string{
-			"Install Equicord",
-			"Repair Equicord",
-			"Uninstall Equicord",
+        choices := []string{
+            "Install Privcord",
+            "Repair Privcord",
+            "Uninstall Privcord",
 			"Install OpenAsar",
 			"Uninstall OpenAsar",
 			"View Help Menu",
@@ -146,8 +146,8 @@ func main() {
 		errSilent = PromptDiscord("patch", *locationFlag, *branchFlag).patch()
 	} else if uninstall {
 		errSilent = PromptDiscord("unpatch", *locationFlag, *branchFlag).unpatch()
-	} else if update {
-		Log.Info("Downloading latest Equicord files...")
+    } else if update {
+        Log.Info("Downloading latest Privcord files...")
 		err := installLatestBuilds()
 		Log.Info("Done!")
 		if err == nil {
@@ -277,5 +277,5 @@ func HandleScuffedInstall() {
 	fmt.Println("Hold On!")
 	fmt.Println("You have a broken Discord Install.")
 	fmt.Println("Please reinstall Discord before proceeding!")
-	fmt.Println("Otherwise, Equicord will likely not work.")
+    fmt.Println("Otherwise, Privcord will likely not work.")
 }

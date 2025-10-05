@@ -80,9 +80,10 @@ func GetGithubRelease(url, fallbackUrl string) (*GithubRelease, error) {
 }
 
 func InitGithubDownloader() {
-	GithubDoneChan = make(chan bool, 1)
+    GithubDoneChan = make(chan bool, 1)
 
-	IsDevInstall = os.Getenv("EQUICORD_DEV_INSTALL") == "1"
+    // Support new PRIVCORD_DEV_INSTALL with legacy fallback
+    IsDevInstall = os.Getenv("PRIVCORD_DEV_INSTALL") == "1" || os.Getenv("EQUICORD_DEV_INSTALL") == "1"
 	Log.Debug("Is Dev Install: ", IsDevInstall)
 	if IsDevInstall {
 		GithubDoneChan <- true
@@ -109,8 +110,8 @@ func InitGithubDownloader() {
 		Log.Debug("Latest hash is", LatestHash, "Local Install is", Ternary(LatestHash == InstalledHash, "up to date!", "outdated!"))
 	}()
 
-	// either .asar file or directory with main.js file (in DEV)
-	EquicordFile := EquicordDirectory
+    // either .asar file or directory with main.js file (in DEV)
+    EquicordFile := PrivcordDirectory
 
 	stat, err := os.Stat(EquicordFile)
 	if err != nil {
@@ -119,7 +120,7 @@ func InitGithubDownloader() {
 
 	// dev
 	if stat.IsDir() {
-		EquicordFile = path.Join(EquicordFile, "main.js")
+        EquicordFile = path.Join(EquicordFile, "main.js")
 	}
 
 	// Check hash of installed version if exists
@@ -128,9 +129,10 @@ func InitGithubDownloader() {
 		return
 	}
 
-	Log.Debug("Found existing Equicord Install. Checking for hash...")
+    Log.Debug("Found existing Privcord install. Checking for hash...")
 
-	re := regexp.MustCompile(`// Equicord (\w+)`)
+    // Support both old Equicord and new Privcord hash markers
+    re := regexp.MustCompile(`// (?:Equicord|Privcord) (\w+)`)
 	match := re.FindSubmatch(b)
 	if match != nil {
 		InstalledHash = string(match[1])
@@ -143,7 +145,7 @@ func InitGithubDownloader() {
 }
 
 func installLatestBuilds() (retErr error) {
-	Log.Debug("Installing latest builds...")
+    Log.Debug("Installing latest builds...")
 
 	if IsDevInstall {
 		Log.Debug("Skipping due to dev install")
@@ -175,15 +177,15 @@ func installLatestBuilds() (retErr error) {
 		retErr = err
 		return
 	}
-	out, err := os.OpenFile(EquicordDirectory, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
+    out, err := os.OpenFile(PrivcordDirectory, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
 	if err != nil {
-		Log.Error("Failed to create", EquicordDirectory+":", err)
+        Log.Error("Failed to create", PrivcordDirectory+":", err)
 		retErr = err
 		return
 	}
 	read, err := io.Copy(out, res.Body)
-	if err != nil {
-		Log.Error("Failed to download to", EquicordDirectory+":", err)
+    if err != nil {
+        Log.Error("Failed to download to", PrivcordDirectory+":", err)
 		retErr = err
 		return
 	}
@@ -196,7 +198,7 @@ func installLatestBuilds() (retErr error) {
 		return
 	}
 
-	_ = FixOwnership(EquicordDirectory)
+    _ = FixOwnership(PrivcordDirectory)
 
 	InstalledHash = LatestHash
 	return
