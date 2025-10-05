@@ -9,7 +9,7 @@
   "RT_MANIFEST": {
     "#1": {
       "0409": {
-        "description": "An Installer for the Equicord Discord Mod",
+        "description": "An Installer for the Privcord Discord Mod",
         "minimum-os": "win10",
         "execution-level": "as invoker",
         "dpi-awareness": "system"
@@ -22,7 +22,7 @@
         "info": {
           "0409": {
             "Comments": "Comments",
-            "CompanyName": "Equicord",
+            "CompanyName": "Privcord",
             "FileDescription": "Equilotl",
             "LegalCopyright": "© 2025 Vendicated and Vencord contributors - GPL3.0",
             "ProductName": "Equilotl",
