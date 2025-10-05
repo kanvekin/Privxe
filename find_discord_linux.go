@@ -32,11 +32,11 @@ func init() {
 		}
 	}
 	if sudoUser != "" {
-		if sudoUser == "root" {
-			panic("Equilotl must not be run as the root user. Please rerun as normal user. Use sudo or doas to run as root.")
+        if sudoUser == "root" {
+            panic("Privcord Installer must not be run as the root user. Please rerun as normal user. Use sudo or doas to run as root.")
 		}
 
-		Log.Debug("Equilotl was run with root privileges, actual user is", sudoUser)
+        Log.Debug("Privcord Installer was run with root privileges, actual user is", sudoUser)
 		Log.Debug("Looking up HOME of", sudoUser)
 
 		u, err := user.Lookup(sudoUser)
@@ -46,8 +46,8 @@ func init() {
 			Log.Debug("Actual HOME is", u.HomeDir)
 			_ = os.Setenv("HOME", u.HomeDir)
 		}
-	} else if os.Getuid() == 0 {
-		panic("Equilotl was run as root but neither SUDO_USER nor DOAS_USER are set. Please rerun me as a normal user, with sudo/doas, or manually set SUDO_USER to your username")
+    } else if os.Getuid() == 0 {
+        panic("Privcord Installer was run as root but neither SUDO_USER nor DOAS_USER are set. Please rerun me as a normal user, with sudo/doas, or manually set SUDO_USER to your username")
 	}
 	Home = os.Getenv("HOME")
 

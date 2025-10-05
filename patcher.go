@@ -19,16 +19,12 @@ import (
 var BaseDir string
 var BaseDirErr error
 // PrivcordDirectory is the path to the installed Privcord .asar (or dev dir)
-// Keep old Equicord envs as fallback for compatibility
 var PrivcordDirectory string
 
 func init() {
     // Determine BaseDir
-    if dir := firstNonEmpty(
-        os.Getenv("PRIVCORD_USER_DATA_DIR"),
-        os.Getenv("EQUICORD_USER_DATA_DIR"), // legacy env var support
-    ); dir != "" {
-        Log.Debug("Using ", ternary(dir == os.Getenv("PRIVCORD_USER_DATA_DIR"), "PRIVCORD_USER_DATA_DIR", "EQUICORD_USER_DATA_DIR"))
+    if dir := os.Getenv("PRIVCORD_USER_DATA_DIR"); dir != "" {
+        Log.Debug("Using PRIVCORD_USER_DATA_DIR")
         BaseDir = dir
     } else if dir = os.Getenv("DISCORD_USER_DATA_DIR"); dir != "" {
         Log.Debug("Using DISCORD_USER_DATA_DIR/../PrivcordData")
@@ -40,7 +36,7 @@ func init() {
     }
 
     // Ensure BaseDir exists when not overridden directly via *_DIRECTORY
-    dir := firstNonEmpty(os.Getenv("PRIVCORD_DIRECTORY"), os.Getenv("EQUICORD_DIRECTORY"))
+    dir := os.Getenv("PRIVCORD_DIRECTORY")
     if dir == "" {
         if !ExistsFile(BaseDir) {
             BaseDirErr = os.Mkdir(BaseDir, 0755)
@@ -54,7 +50,7 @@ func init() {
 
     // Choose PrivcordDirectory
     if dir != "" {
-        Log.Debug("Using ", ternary(os.Getenv("PRIVCORD_DIRECTORY") != "", "PRIVCORD_DIRECTORY", "EQUICORD_DIRECTORY"))
+        Log.Debug("Using PRIVCORD_DIRECTORY")
         PrivcordDirectory = dir
     } else {
         // default filename renamed to privcord.asar

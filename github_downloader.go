@@ -82,8 +82,8 @@ func GetGithubRelease(url, fallbackUrl string) (*GithubRelease, error) {
 func InitGithubDownloader() {
     GithubDoneChan = make(chan bool, 1)
 
-    // Support new PRIVCORD_DEV_INSTALL with legacy fallback
-    IsDevInstall = os.Getenv("PRIVCORD_DEV_INSTALL") == "1" || os.Getenv("EQUICORD_DEV_INSTALL") == "1"
+    // Support PRIVCORD_DEV_INSTALL only
+    IsDevInstall = os.Getenv("PRIVCORD_DEV_INSTALL") == "1"
 	Log.Debug("Is Dev Install: ", IsDevInstall)
 	if IsDevInstall {
 		GithubDoneChan <- true
@@ -111,28 +111,28 @@ func InitGithubDownloader() {
 	}()
 
     // either .asar file or directory with main.js file (in DEV)
-    EquicordFile := PrivcordDirectory
+    installedFile := PrivcordDirectory
 
-	stat, err := os.Stat(EquicordFile)
+    stat, err := os.Stat(installedFile)
 	if err != nil {
 		return
 	}
 
 	// dev
-	if stat.IsDir() {
-        EquicordFile = path.Join(EquicordFile, "main.js")
+    if stat.IsDir() {
+        installedFile = path.Join(installedFile, "main.js")
 	}
 
 	// Check hash of installed version if exists
-	b, err := os.ReadFile(EquicordFile)
+    b, err := os.ReadFile(installedFile)
 	if err != nil {
 		return
 	}
 
     Log.Debug("Found existing Privcord install. Checking for hash...")
 
-    // Support both old Equicord and new Privcord hash markers
-    re := regexp.MustCompile(`// (?:Equicord|Privcord) (\w+)`)
+    // Support Privcord hash marker
+    re := regexp.MustCompile(`// Privcord (\w+)`)
 	match := re.FindSubmatch(b)
 	if match != nil {
 		InstalledHash = string(match[1])
