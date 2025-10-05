@@ -1,4 +1,4 @@
-# Equilotl
+# Privcord
 
 The Privcord Installer allows you to install [Privcord](https://github.com/kanvekin/Privcord)
 
@@ -7,15 +7,15 @@ The Privcord Installer allows you to install [Privcord](https://github.com/kanve
 ## Usage
 
 Windows
-- [GUI](https://github.com/kanvekin/Privcord/releases/latest/download/Equilotl.exe) 
-- [CLI](https://github.com/kanvekin/Privcord/releases/latest/download/EquilotlCli.exe)
+- [GUI](https://github.com/kanvekin/Privcord/releases/latest/download/Privcord.exe) 
+- [CLI](https://github.com/kanvekin/Privcord/releases/latest/download/PrivcordCli.exe)
 
 MacOS
-- [GUI](https://github.com/kanvekin/Privcord/releases/latest/download/Equilotl.MacOS.zip)
+- [GUI](https://github.com/kanvekin/Privcord/releases/latest/download/Privcord.MacOS.zip)
 
 Linux 
-- [GUI](https://github.com/kanvekin/Privcord/releases/latest/download/Equilotl-x11)
-- [CLI](https://github.com/kanvekin/Privcord/releases/latest/download/EquilotlCli-Linux)
+- [GUI](https://github.com/kanvekin/Privcord/releases/latest/download/Privcord-x11)
+- [CLI](https://github.com/kanvekin/Privcord/releases/latest/download/PrivcordCli-linux)
 ## Building from source
 
 ### Prerequisites 

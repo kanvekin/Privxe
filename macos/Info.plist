@@ -3,7 +3,7 @@
 <plist version="1.0">
     <dict>
         <key>CFBundleExecutable</key>
-        <string>Equilotl</string>
+        <string>Privcord</string>
 
         <key>CFBundleIconFile</key>
         <string>icon.icns</string>

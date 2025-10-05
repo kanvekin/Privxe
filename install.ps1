@@ -1,6 +1,6 @@
-$link = "https://github.com/kanvekin/Privcord/releases/latest/download/EquilotlCli.exe"
+$link = "https://github.com/kanvekin/Privcord/releases/latest/download/PrivcordCli.exe"
 
-$outfile = "$env:TEMP\EquilotlCli.exe"
+$outfile = "$env:TEMP\PrivcordCli.exe"
 
 Write-Output "Downloading installer to $outfile"
 

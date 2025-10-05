@@ -47,14 +47,14 @@ func init() {
 
 func GetInstallerDownloadLink() string {
     const BaseUrl = "https://github.com/kanvekin/Privcord/releases/latest/download/"
-	switch runtime.GOOS {
-	case "windows":
-		filename := Ternary(buildinfo.UiType == buildinfo.UiTypeCli, "EquilotlCli.exe", "Equilotl.exe")
-		return BaseUrl + filename
-	case "darwin":
-		return BaseUrl + "Equilotl.MacOS.zip"
-	case "linux":
-		return BaseUrl + "EquilotlCli-linux"
+    switch runtime.GOOS {
+    case "windows":
+        filename := Ternary(buildinfo.UiType == buildinfo.UiTypeCli, "PrivcordCli.exe", "Privcord.exe")
+        return BaseUrl + filename
+    case "darwin":
+        return BaseUrl + "Privcord.MacOS.zip"
+    case "linux":
+        return BaseUrl + "PrivcordCli-linux"
 	default:
 		return ""
 	}
@@ -90,7 +90,7 @@ func UpdateSelf() error {
 	}
 	defer res.Body.Close()
 
-	tmp, err := os.CreateTemp(ownExeDir, "EquilotlUpdate")
+    tmp, err := os.CreateTemp(ownExeDir, "PrivcordUpdate")
 	if err != nil {
 		return fmt.Errorf("Failed to create tempfile: %w", err)
 	}
