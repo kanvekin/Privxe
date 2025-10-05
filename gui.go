@@ -80,7 +80,7 @@ func main() {
 		os.Setenv("GDK_DPI_SCALE", "1")
 	}
 
-	win = g.NewMasterWindow("Equilotl", 1200, 800, linuxFlags)
+    win = g.NewMasterWindow("Privcord Installer", 1200, 800, linuxFlags)
 
 	icon, _, err := image.Decode(bytes.NewReader(iconBytes))
 	if err != nil {
@@ -360,8 +360,8 @@ func UpdateModal() g.Widget {
 				Flags(g.WindowFlagsNoTitleBar | g.WindowFlagsAlwaysAutoResize).
 				Layout(
 					g.Align(g.AlignCenter).To(
-						g.Style().SetFontSize(30).To(
-							g.Label("Your Installer is outdated!"),
+                g.Style().SetFontSize(30).To(
+                    g.Label("Your Installer is outdated!"),
 						),
 						g.Style().SetFontSize(20).To(
 							g.Label(
@@ -630,8 +630,8 @@ func loop() {
 		).
 		Layout(
 			g.Align(g.AlignCenter).To(
-				g.Style().SetFontSize(40).To(
-					g.Label("Equilotl"),
+                g.Style().SetFontSize(40).To(
+                    g.Label("Privcord Installer"),
 				),
 			),
 
@@ -652,7 +652,7 @@ func loop() {
                     return g.Label("To customise this location, set the environment variable 'PRIVCORD_USER_DATA_DIR' and restart me").Wrapped(true)
                 }, nil},
 				g.Dummy(0, 10),
-                g.Label("Equilotl Version: "+buildinfo.InstallerTag+" ("+buildinfo.InstallerGitHash+")"+Ternary(IsSelfOutdated, " - OUTDATED", "")),
+                g.Label("Privcord Installer Version: "+buildinfo.InstallerTag+" ("+buildinfo.InstallerGitHash+")"+Ternary(IsSelfOutdated, " - OUTDATED", "")),
                 g.Label("Local Privcord Version: "+InstalledHash),
 				&CondWidget{
 					GithubError == nil,
