@@ -19,6 +19,10 @@ var macosNames = map[string]string{
 	"dev":    "Discord Development.app",
 }
 
+func ParseDiscordNew(p, branch string, isFlatpak bool) *DiscordInstall {
+	return nil
+}
+
 func ParseDiscord(p, branch string) *DiscordInstall {
 	if !ExistsFile(p) {
 		return nil
@@ -26,6 +30,11 @@ func ParseDiscord(p, branch string) *DiscordInstall {
 
 	resources := path.Join(p, "/Contents/Resources")
 	if !ExistsFile(resources) {
+		return nil
+	}
+
+	isPatched := ExistsFile(path.Join(resources, "_app.asar"))
+	if !isPatched && !ExistsFile(path.Join(resources, "app.asar")) {
 		return nil
 	}
 
@@ -38,7 +47,7 @@ func ParseDiscord(p, branch string) *DiscordInstall {
 		path:             p,
 		branch:           branch,
 		appPath:          app,
-		isPatched:        ExistsFile(path.Join(resources, "_app.asar")),
+		isPatched:        isPatched,
 		isFlatpak:        false,
 		isSystemElectron: false,
 	}

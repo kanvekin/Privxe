@@ -8,12 +8,13 @@ package main
 
 import (
 	"errors"
-	"golang.org/x/sys/windows"
 	"os"
 	path "path/filepath"
 	"strings"
 	"sync"
 	"unsafe"
+
+	"golang.org/x/sys/windows"
 )
 
 var windowsNames = map[string]string{
@@ -24,6 +25,10 @@ var windowsNames = map[string]string{
 }
 
 var killLock sync.Mutex
+
+func ParseDiscordNew(p, branch string, isFlatpak bool) *DiscordInstall {
+	return nil
+}
 
 func ParseDiscord(p, branch string) *DiscordInstall {
 	entries, err := os.ReadDir(p)
@@ -36,17 +41,27 @@ func ParseDiscord(p, branch string) *DiscordInstall {
 
 	isPatched := false
 	appPath := ""
+	var latestVer []int
 	for _, dir := range entries {
-		if dir.IsDir() && strings.HasPrefix(dir.Name(), "app-") {
-			resources := path.Join(p, dir.Name(), "resources")
-			if !ExistsFile(resources) {
-				continue
-			}
-			app := path.Join(resources, "app")
-			if app > appPath {
-				appPath = app
-				isPatched = ExistsFile(path.Join(resources, "_app.asar"))
-			}
+		if !dir.IsDir() || !strings.HasPrefix(dir.Name(), "app-") {
+			continue
+		}
+		resources := path.Join(p, dir.Name(), "resources")
+		if !ExistsFile(resources) {
+			continue
+		}
+		dirIsPatched := ExistsFile(path.Join(resources, "_app.asar"))
+		if !dirIsPatched && !ExistsFile(path.Join(resources, "app.asar")) {
+			continue
+		}
+		ver := ParseAppVersion(dir.Name())
+		if ver == nil {
+			continue
+		}
+		if appPath == "" || CompareAppVersion(ver, latestVer) > 0 {
+			appPath = path.Join(resources, "app")
+			isPatched = dirIsPatched
+			latestVer = ver
 		}
 	}
 
@@ -90,7 +105,7 @@ func FindDiscords() []any {
 func PreparePatch(di *DiscordInstall) {
 	killLock.Lock()
 	defer killLock.Unlock()
-	
+
 	name := windowsNames[di.branch]
 	Log.Debug("Trying to kill", name)
 	pid := findProcessIdByName(name + ".exe")
@@ -124,7 +139,7 @@ func CheckScuffedInstall() bool {
 	username := os.Getenv("USERNAME")
 	programData := os.Getenv("PROGRAMDATA")
 	for _, discordName := range windowsNames {
-		if ExistsFile(path.Join(programData, username, discordName)) || ExistsFile(path.Join(programData, username, discordName)) {
+		if ExistsFile(path.Join(programData, username, discordName)) {
 			HandleScuffedInstall()
 			return true
 		}

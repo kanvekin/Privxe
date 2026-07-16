@@ -11,10 +11,10 @@ package main
 import (
 	"bytes"
 	_ "embed"
+	"equilotl/buildinfo"
 	"errors"
 	"image"
 	"image/color"
-	"vencord/buildinfo"
 
 	g "github.com/AllenDang/giu"
 	"github.com/AllenDang/imgui-go"
@@ -111,6 +111,9 @@ func getChosenInstall() *DiscordInstall {
 	if radioIdx == customChoiceIdx {
 		choice = ParseDiscord(customDir, "")
 		if choice == nil {
+			choice = ParseDiscordNew(customDir, "", strings.Contains(customDir, "com.discordapp"))
+		}
+		if choice == nil {
 			g.OpenPopup("#invalid-custom-location")
 		}
 	} else {
@@ -176,6 +179,9 @@ func handleOpenAsarConfirmed() {
 }
 
 func handleErr(di *DiscordInstall, err error, action string) {
+	if errors.Is(err, ErrAlreadyReported) {
+		return
+	}
 	if errors.Is(err, os.ErrPermission) {
 		switch runtime.GOOS {
 		case "windows":
